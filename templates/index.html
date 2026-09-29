@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102b35">
+  <title>ClimateGuard AI — Understand our changing planet</title>
+  <style>
+    :root {
+      --ink: #172e35; --muted: #71858a; --paper: #f2f6f4; --line: #e0e9e5;
+      --teal: #087e78; --teal-dark: #06645f; --lime: #d8efad; --shadow: 0 24px 70px rgba(17,54,58,.13);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 28px;
+      color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 5% 10%, #d9eee2 0, transparent 29rem),
+                  radial-gradient(circle at 95% 90%, #d8e9ef 0, transparent 30rem), var(--paper);
+    }
+    .app { width: min(1160px, 100%); min-height: min(770px, calc(100vh - 56px)); display: grid; grid-template-columns: 330px 1fr; overflow: hidden; border: 1px solid #ffffffd9; border-radius: 28px; background: #fffffff0; box-shadow: var(--shadow); }
+    aside { position: relative; display: flex; flex-direction: column; overflow: hidden; padding: 30px 27px; color: #f2fbf8; background: linear-gradient(155deg, #102b35, #145b5a 63%, #16867b); }
+    aside::before, aside::after { content: ""; position: absolute; width: 330px; height: 330px; border: 1px solid #ffffff20; border-radius: 50%; right: -210px; top: 150px; box-shadow: 0 0 0 25px #ffffff08, 0 0 0 55px #ffffff06; }
+    aside::after { width: 190px; height: 190px; right: auto; left: -135px; top: auto; bottom: -100px; }
+    .brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 800; letter-spacing: -.04em; }
+    .mark { width: 43px; height: 43px; display: grid; place-items: center; border: 1px solid #ffffff35; border-radius: 14px; background: #ffffff12; }
+    .mark svg { width: 25px; }
+    .eyebrow { position: relative; z-index: 1; margin: 65px 0 13px; color: #c6e7b1; font-size: 10px; font-weight: 850; letter-spacing: .19em; text-transform: uppercase; }
+    h1 { position: relative; z-index: 1; margin: 0; max-width: 270px; font-size: clamp(33px, 3.4vw, 45px); line-height: 1.03; letter-spacing: -.06em; }
+    .intro { position: relative; z-index: 1; margin: 18px 0 0; color: #c9e2e1; font-size: 13px; line-height: 1.8; }
+    .art { position: relative; z-index: 1; width: 210px; max-width: 100%; margin: 26px auto 24px; }
+    .section-label { color: #c6e7b1; font-size: 10px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 12px; }
+    .topics { display: flex; flex-wrap: wrap; gap: 8px; }
+    .topic { border: 1px solid #ffffff28; border-radius: 999px; padding: 8px 11px; color: #e8f7f2; background: #ffffff0b; font-size: 11px; }
+    .side-bottom { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 26px; color: #b9d7d5; font-size: 10px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #c9ec9c; box-shadow: 0 0 0 4px #c9ec9c20; }
+    main { min-width: 0; min-height: 700px; display: flex; flex-direction: column; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 25px 31px; border-bottom: 1px solid var(--line); }
+    .top-title { font-size: 14px; font-weight: 800; }
+    .top-sub { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .badge { padding: 8px 11px; border-radius: 999px; color: #08766e; background: #e2f4e9; font-size: 10px; font-weight: 800; }
+    .chat { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; padding: 27px 31px; }
+    .welcome { padding: 22px; border: 1px solid #e0eae3; border-radius: 20px; background: linear-gradient(135deg, #f2faf3, #f1f8f8); }
+    .welcome-kicker { color: #087e78; font-size: 10px; font-weight: 850; letter-spacing: .15em; text-transform: uppercase; }
+    .welcome h2 { margin: 10px 0 8px; font-size: 24px; letter-spacing: -.045em; }
+    .welcome p { margin: 0; color: #71858a; font-size: 13px; line-height: 1.7; }
+    .suggestions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-top: 18px; }
+    .suggestion { text-align: left; border: 1px solid #dfe9e3; border-radius: 13px; padding: 12px; background: #ffffffc9; color: #304e50; cursor: pointer; font: inherit; font-size: 12px; transition: .18s ease; }
+    .suggestion:hover { border-color: #87c4b3; transform: translateY(-1px); }
+    .message { display: flex; align-items: flex-start; gap: 11px; max-width: 88%; animation: rise .2s ease-out; }
+    .message.user { align-self: flex-end; flex-direction: row-reverse; }
+    .avatar { flex: 0 0 32px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 11px; color: #087e78; background: #dff2e8; font-size: 11px; font-weight: 850; }
+    .user .avatar { color: #355c78; background: #e0edf5; }
+    .bubble { padding: 13px 15px; border: 1px solid var(--line); border-radius: 4px 16px 16px 16px; background: white; color: #3c5055; font-size: 13px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .user .bubble { border-color: #dce8ef; border-radius: 16px 4px 16px 16px; background: #edf5f8; color: #2e4859; }
+    .composer-wrap { padding: 17px 31px 23px; border-top: 1px solid var(--line); }
+    .composer { display: flex; align-items: flex-end; gap: 10px; padding: 9px; border: 1px solid #dce7e2; border-radius: 18px; background: white; transition: border-color .2s; }
+    .composer:focus-within { border-color: #7fc2b5; }
+    textarea { flex: 1; min-height: 42px; max-height: 140px; resize: none; border: 0; outline: 0; padding: 9px 8px; background: transparent; color: var(--ink); font: inherit; font-size: 13px; line-height: 1.5; }
+    textarea::placeholder { color: #9ba9aa; }
+    .send { flex: 0 0 42px; width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 13px; background: var(--teal); color: white; cursor: pointer; transition: .18s; }
+    .send:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .send:disabled { opacity: .45; cursor: wait; transform: none; }
+    .send svg { width: 18px; }
+    .hint { margin: 10px 4px 0; color: #98a6a6; font-size: 10px; text-align: center; }
+    .typing { display: inline-flex; gap: 4px; padding: 4px 0; }
+    .typing i { width: 5px; height: 5px; border-radius: 50%; background: #69aaa0; animation: pulse 1s infinite ease-in-out; }
+    .typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+    @keyframes pulse { 0%,60%,100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 760px) {
+      body { display: block; padding: 0; }
+      .app { width: 100%; min-height: 100vh; grid-template-columns: 1fr; border-radius: 0; }
+      aside { padding: 20px 22px; min-height: auto; }
+      .eyebrow { margin-top: 28px; } h1 { max-width: 500px; font-size: 32px; }
+      .intro { max-width: 500px; margin-top: 10px; } .art, .section-label, .topics, .side-bottom { display: none; }
+      main { min-height: 65vh; } .topbar { padding: 18px 20px; }
+      .chat { padding: 20px; } .composer-wrap { padding: 14px 20px 20px; }
+      .message { max-width: 96%; }
+    }
+    @media (max-width: 420px) { .suggestions { grid-template-columns: 1fr; } .badge { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 3 27 8v7c0 7-4.5 11.5-11 14C9.5 26.5 5 22 5 15V8l11-5Z" stroke="currentColor" stroke-width="1.6"/><path d="M10 18c0-5 3-8 10-9-1 7-4 10-10 9Zm0 0 9-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        ClimateGuard AI
+      </div>
+      <div>
+        <p class="eyebrow">Understand. Adapt. Act.</p>
+        <h1>Small questions. Planet-sized perspective.</h1>
+        <p class="intro">Explore Earth's climate, understand what is changing, and learn about the science and solutions shaping our shared future.</p>
+        <svg class="art" viewBox="0 0 220 190" fill="none" aria-hidden="true">
+          <circle cx="110" cy="94" r="78" stroke="#BDE9D6" stroke-opacity=".65"/>
+          <ellipse cx="110" cy="94" rx="35" ry="78" stroke="#BDE9D6" stroke-opacity=".45"/>
+          <ellipse cx="110" cy="94" rx="75" ry="28" transform="rotate(-25 110 94)" stroke="#BDE9D6" stroke-opacity=".45"/>
+          <path d="M49 69 69 55l20 5 9 15-13 11-2 17-15 7-12-17-11-7 4-17Zm77-25 17 7 4 15-14 8-10-12 3-18Zm-2 80 20-10 17 10-3 17-19 8-15-11v-14Z" fill="#BFE6B4" fill-opacity=".85"/>
+          <path d="M36 143c25-13 49-13 74 0s49 13 74 0" stroke="#BDE9D6" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M36 153c25-13 49-13 74 0s49 13 74 0" stroke="#BDE9D6" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="110" cy="94" r="78" stroke="#E5F7ED" stroke-width="1.5"/>
+        </svg>
+        <div class="section-label">Explore a climate topic</div>
+        <div class="topics"><span class="topic">Climate science</span><span class="topic">Greenhouse effect</span><span class="topic">Impacts</span><span class="topic">Adaptation</span><span class="topic">Mitigation</span></div>
+      </div>
+      <div class="side-bottom"><span class="dot"></span> A learning space for climate understanding</div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <div><div class="top-title">Climate learning assistant</div><div class="top-sub">Ask. Understand. Explore solutions.</div></div>
+        <span class="badge">● Climate-focused AI</span>
+      </header>
+      <section class="chat" id="chat" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-kicker">Welcome to ClimateGuard AI</div>
+          <h2>What would you like to understand?</h2>
+          <p>Explore climate science with clear explanations, study help, and a grounded look at impacts and solutions.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-question="How does the greenhouse effect work?">🌍 How does the greenhouse effect work?</button>
+            <button class="suggestion" data-question="What is the difference between weather and climate?">☁️ Weather vs. climate</button>
+            <button class="suggestion" data-question="What is the difference between climate adaptation and mitigation?">🌱 Adaptation vs. mitigation</button>
+            <button class="suggestion" data-question="How does climate change affect sea levels?">🌊 Climate change and sea levels</button>
+          </div>
+        </div>
+      </section>
+      <div class="composer-wrap">
+        <form class="composer" id="chat-form">
+          <textarea id="message" rows="1" maxlength="6000" placeholder="Ask a climate science question..." aria-label="Your climate question"></textarea>
+          <button class="send" id="send" type="submit" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12L20 4l-5 16-3.5-6.5L4 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M11.5 13.5L20 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </form>
+        <div class="hint">ClimateGuard AI focuses on climate science and climate-related study topics.</div>
+      </div>
+    </main>
+  </div>
+  <script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("message");
+    const send = document.getElementById("send");
+    const welcome = document.getElementById("welcome");
+
+    function addMessage(text, role) {
+      const row = document.createElement("div");
+      row.className = `message ${role}`;
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = role === "user" ? "You" : "C";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+      row.append(avatar, bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function showTyping() {
+      const row = document.createElement("div");
+      row.className = "message";
+      row.id = "typing";
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = "C";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = '<span class="typing" aria-label="ClimateGuard AI is thinking"><i></i><i></i><i></i></span>';
+      row.append(avatar, bubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      return row;
+    }
+
+    async function sendMessage(text) {
+      const message = text.trim();
+      if (!message || send.disabled) return;
+      welcome?.remove();
+      addMessage(message, "user");
+      input.value = "";
+      input.style.height = "auto";
+      send.disabled = true;
+      const typing = showTyping();
+
+      try {
+        const response = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await response.json();
+        typing.remove();
+        if (!response.ok) throw new Error(data.error || "Something went wrong.");
+        addMessage(data.reply, "assistant");
+      } catch (error) {
+        typing.remove();
+        addMessage(error.message || "Connection error. Please try again.", "assistant");
+      } finally {
+        send.disabled = false;
+        input.focus();
+      }
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      sendMessage(input.value);
+    });
+    input.addEventListener("input", () => {
+      input.style.height = "auto";
+      input.style.height = `${Math.min(input.scrollHeight, 140)}px`;
+    });
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+    document.querySelectorAll("[data-question]").forEach(button => {
+      button.addEventListener("click", () => sendMessage(button.dataset.question));
+    });
+  </script>
+</body>
+</html>
